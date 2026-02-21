@@ -55,6 +55,16 @@ jobs:
             -t ${{ env.REGISTRY }}/${{ secrets.PROJECT_ID }}/${{ env.REPO }}/agent-backend:latest \
             backend/
 
+      
+      # ─────────────────────────────────────
+      # Build y Push — Frontend (Nginx)
+      # ─────────────────────────────────────
+      - name: Build frontend image
+        run: |
+          docker build \
+            -t ${{ env.REGISTRY }}/${{ secrets.PROJECT_ID }}/${{ env.REPO }}/agent-frontend:${{ github.sha }} \
+            -t ${{ env.REGISTRY }}/${{ secrets.PROJECT_ID }}/${{ env.REPO }}/agent-frontend:latest \
+            frontend/
       # ─────────────────────────────────────
       #  Escaneo de seguridad — Backend
       # ─────────────────────────────────────
@@ -67,21 +77,7 @@ jobs:
           severity: 'CRITICAL,HIGH'
           ignore-unfixed: true
 
-      - name: Push backend image
-        run: |
-          docker push ${{ env.REGISTRY }}/${{ secrets.PROJECT_ID }}/${{ env.REPO }}/agent-backend:${{ github.sha }}
-          docker push ${{ env.REGISTRY }}/${{ secrets.PROJECT_ID }}/${{ env.REPO }}/agent-backend:latest
-
-      # ─────────────────────────────────────
-      # Build y Push — Frontend (Nginx)
-      # ─────────────────────────────────────
-      - name: Build frontend image
-        run: |
-          docker build \
-            -t ${{ env.REGISTRY }}/${{ secrets.PROJECT_ID }}/${{ env.REPO }}/agent-frontend:${{ github.sha }} \
-            -t ${{ env.REGISTRY }}/${{ secrets.PROJECT_ID }}/${{ env.REPO }}/agent-frontend:latest \
-            frontend/
-
+      
       # ─────────────────────────────────────
       #  Escaneo de seguridad — Frontend
       # ─────────────────────────────────────
@@ -93,7 +89,11 @@ jobs:
           exit-code: '1'
           severity: 'CRITICAL,HIGH'
           ignore-unfixed: true
-      
+          
+      - name: Push backend image
+        run: |
+          docker push ${{ env.REGISTRY }}/${{ secrets.PROJECT_ID }}/${{ env.REPO }}/agent-backend:${{ github.sha }}
+          docker push ${{ env.REGISTRY }}/${{ secrets.PROJECT_ID }}/${{ env.REPO }}/agent-backend:latest
       - name: Push frontend image
         run: |
           docker push ${{ env.REGISTRY }}/${{ secrets.PROJECT_ID }}/${{ env.REPO }}/agent-frontend:${{ github.sha }}
