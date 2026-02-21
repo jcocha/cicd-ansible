@@ -3,4 +3,4 @@
 Las prácticas se describen con detalle en Práctica1.md y Práctica2.md, en esta misma carpeta.
 Segunda modificacion jjcc.   tercer commit. 4to commit
 
-cambio para robar el despliegue...
+cambio para robar el despliegue.
